@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap>
+
+	<typeAlias type="com.yzb.framework.core.pojo.Page" alias="page" />
+	<typeAlias type="${m.conf.fullClassName}" alias="${m.name}" />
+
+	<select id="${m.name}.select" resultClass="${m.name}"
+		parameterClass="${m.conf.keyType}">
+		SELECT
+		#foreach($obj in $m.fieldList)
+			a.${obj.dbName} ${obj.name} #if($velocityCount < $m.fieldList.size()),#else #end
+		 	 
+		#end
+		FROM
+			${m.dbName} a
+		where
+			a.${m.conf.keyDbName} = #${m.conf.key}#
+	</select>
+	<sql id="${m.name}.commonQuery">
+		<dynamic prepend="where">
+		#foreach($obj in $m.conf.queryList)
+	  	<isNotEmpty property="${obj.name}" prepend="and" >
+	    	a.${obj.dbName} = #${obj.name}#
+	  	</isNotEmpty>
+		#end
+		#foreach($obj in $m.conf.queryTimeList)
+	  	<isNotEmpty property="${obj.name}Start" prepend="and" >
+<![CDATA[ a.${obj.dbName} >= #${obj.name}Start#  ]]>
+	  	</isNotEmpty>
+	  	<isNotEmpty property="${obj.name}End" prepend="and" >
+<![CDATA[ a.${obj.dbName} <= #${obj.name}End#  ]]>
+	  	</isNotEmpty>
+		#end
+		#foreach($obj in $m.conf.likeQueryList)
+	  	<isNotEmpty property="${obj.name}" prepend="and" >
+	    	a.${obj.dbName} like concat('%',#${obj.name}#,'%')
+	  	</isNotEmpty>
+		#end
+		</dynamic>
+	</sql>
+	<select id="${m.name}.query" resultClass="${m.name}"
+		parameterClass="java.util.Map">
+		SELECT
+		#foreach($obj in $m.fieldList)
+			a.${obj.dbName} ${obj.name} #if($velocityCount < $m.fieldList.size()),#else #end
+		 	 
+		#end
+		FROM
+			${m.dbName} a 
+		<include refid="${m.name}.commonQuery"/>
+		order by a.${m.orderBy} desc
+		limit #from#, #to#
+	</select>
+	<select id="${m.name}.queryCount" resultClass="java.lang.Integer"
+		parameterClass="java.util.Map">
+		SELECT
+		    count(1)
+		FROM
+			${m.dbName} a
+		<include refid="${m.name}.commonQuery"/>
+	</select>
+	<insert id="${m.name}.insert"  parameterClass="${m.name}">
+		insert into ${m.dbName}(
+	    #foreach($obj in $m.conf.insertList)
+		 	${obj.dbName}#if($velocityCount < $m.conf.insertList.size()),#else #end
+		 	
+		#end
+	    ) values (
+	     #foreach($obj in $m.conf.insertList)
+		 	${obj.dbValue} #if($velocityCount < $m.conf.insertList.size()),#else #end
+		 	
+		#end
+		)
+		#if( $m.conf.isKeyAutoIncrease )
+		<selectKey resultClass="long" keyProperty="${m.conf.key}">  
+        	select LAST_INSERT_ID()   
+    	</selectKey>  
+    	#end
+	</insert>
+	#if( $m.editAble )
+	<update id="${m.name}.update"  parameterClass="${m.name}">
+		update ${m.dbName} a set 
+	    #foreach($obj in $m.conf.updateList)
+		 	a.${obj.dbName} = ${obj.dbValue},
+		 	
+		#end
+		a.update_by = #updateBy#,
+		a.update_date = now()
+		 where a.${m.conf.keyDbName} = #${m.key.name}#
+	</update>
+	<!-- 更新非空内容 -->
+	<update id="${m.name}.updateNotEmpty"  parameterClass="${m.name}">
+		update ${m.dbName} a set 
+	    #foreach($obj in $m.conf.updateList)
+		 	<isNotEmpty property="${obj.name}" prepend="," >
+	    		a.${obj.dbName} = ${obj.dbValue}
+	  		</isNotEmpty>
+		#end ,
+		a.update_by = #updateBy#,
+		a.update_date = now()
+		 where a.${m.conf.keyDbName} = #${m.conf.key}#
+	</update>
+	<delete id="${m.name}.delete"  parameterClass="${m.conf.keyType}">
+		delete from ${m.dbName}  where ${m.conf.keyDbName}=#${m.conf.key}#
+	</delete>
+	#end
+</sqlMap>

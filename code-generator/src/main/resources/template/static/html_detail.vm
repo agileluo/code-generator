@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html ng-app="${m.name}DetailApp">
+<head>
+<!--# include file="/static/html/common/common-header.html" -->
+<script charset="utf-8" type="text/javascript" src="${m.name}-service.js"></script>
+<script charset="utf-8" type="text/javascript" src="${m.name}-detail.js"></script>
+</head>
+<body class="yzb-container" ng-controller="${m.name}DetailController">
+	<div>
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<form  name="${m.name}Form" class="form-horizontal" my-valid>
+					#foreach($f in $m.fieldList)
+				    	#if($velocityCount % 2 == 1)<div class="row form-group-sm" >
+				    	#end
+				    	<label class="col-sm-2 control-label">${f.comment}：</label>
+				    	<div class="col-sm-4">
+						#if($f.codeType != "") <select ng-model="${m.name}.${f.name}" name="${m.name}.${f.name}" class="form-control" my-option="${f.codeType}" #if($f.notNull) ng-required="true" #end ></select> 
+						#else <input type="text" class="form-control" ng-model="${m.name}.${f.name}" name="${m.name}.${f.name}" #if($f.notNull) ng-required="true" #end #if($f.length != 0 ) ng-maxlength="${f.length}" #end > #end
+						</div>
+						#if($velocityCount % 2 == 0)</div>
+						#end
+					#end
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-4 col-sm-2">
+			<button class="btn btn-primary" ng-disabled="ajaxLoading" ng-click="save()">提 交</button>
+			<button class="btn btn-danger" ng-click="close()">关 闭</button>
+		</div>
+	</div>
+</body>
+</html>

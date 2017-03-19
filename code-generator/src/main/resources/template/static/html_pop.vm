@@ -1,0 +1,23 @@
+<div class="modal-header">
+	<h4 class="modal-title">${m.comment}编辑</h4>
+</div>
+<div class="modal-body">
+	<form  name="${m.name}Form" class="form-horizontal" my-valid>
+		
+		#foreach($f in $m.fieldList)
+	    	#if($velocityCount % 2 == 1)<div class="row form-group-sm" >
+	    	#end
+	    	<label class="col-sm-2 control-label">${f.comment}：</label>
+	    	<div class="col-sm-4">
+			#if($f.codeType != "") <select ng-model="${m.name}.${f.name}" name="${m.name}.${f.name}" class="form-control" my-option="${f.codeType}" #if($f.notNull) ng-required="true" #end ></select> 
+			#else <input type="text" class="form-control" ng-model="${m.name}.${f.name}" name="${m.name}.${f.name}" #if($f.notNull) ng-required="true" #end  #if($f.length != 0 ) ng-maxlength="${f.length}" #end > #end
+			</div>
+			#if($velocityCount % 2 == 0)</div>
+			#end
+		#end
+	</form>
+</div>
+<div class="modal-footer row">
+	<button class="btn btn-primary" ng-disabled="ajaxLoading" ng-click="ok()" ng-hide="readOnly">提 交</button>
+	<button class="btn btn-danger" ng-click="cancel()">关 闭</button>
+</div>

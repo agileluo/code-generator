@@ -1,0 +1,84 @@
+package ${m.packageName}.dao.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
+import org.springframework.stereotype.Repository;
+
+import ${m.packageName}.dao.${m.className}Dao;
+import ${m.packageName}.pojo.${m.className};
+import com.yzb.framework.common.util.PageUtils;
+import com.yzb.framework.core.pojo.Page;
+import com.ibatis.sqlmap.client.SqlMapClient;
+
+@Repository
+public class ${m.className}DaoImpl extends SqlMapClientDaoSupport implements ${m.className}Dao {
+	@Resource(name="sqlMapClient")
+    public void setSqlMapClientWorkaround(SqlMapClient sqlMapClient) {
+        this.setSqlMapClient(sqlMapClient);
+    }
+	@Override
+	public ${m.className} get(${m.key.type.simpleName} ${m.key.name}) {
+		return (${m.className})getSqlMapClientTemplate().queryForObject("${m.name}.select", ${m.key.name});
+	}
+	@Override
+	public List<${m.className}> query(${m.className} ${m.name}) {
+		Map<String, Object> queryMap = PageUtils.createPageQueryMap(${m.name});
+		return (List<${m.className}>)getSqlMapClientTemplate().queryForList("${m.name}.query", queryMap);
+	}
+	
+	@Override
+	public List<${m.className}> query(Map<String, Object> map) {
+		PageUtils.setDefaultPageInfo(map);
+		return (List<${m.className}>)getSqlMapClientTemplate().queryForList("${m.name}.query", map);
+	}
+	@Override
+	public Page<${m.className}> pageQuery(Map<String, Object> map) {
+		Page<${m.className}> page = new Page<>();
+		PageUtils.setPageInfo(map);
+		page.setList(getSqlMapClientTemplate().queryForList("${m.name}.query", map));
+		page.setTotal((Integer)getSqlMapClientTemplate().queryForObject("${m.name}.queryCount", map));
+		return page;
+	}
+	
+	@Override
+	public Page<${m.className}> pageQuery(Page<${m.className}> page) {
+		Map<String, Object> queryMap = PageUtils.createPageQueryMapFromPage(page);
+		page.setList(getSqlMapClientTemplate().queryForList("${m.name}.query", queryMap));
+		page.setTotal((Integer)getSqlMapClientTemplate().queryForObject("${m.name}.queryCount", queryMap));
+		return page;
+	}
+
+	@Override
+	public ${m.className} save(${m.className} ${m.name}) {
+		#if( $m.conf.isKeyAutoIncrease )
+		Long lastId = (Long)getSqlMapClientTemplate().insert("${m.name}.insert", ${m.name});
+		${m.name}.set${m.conf.keyClassName}(lastId);
+		return ${m.name};
+		#else
+		getSqlMapClientTemplate().insert("${m.name}.insert", ${m.name});
+		return ${m.name};
+		#end
+		
+	}
+	#if( $m.editAble )
+	@Override
+	public ${m.className} update(${m.className} ${m.name}) {
+		getSqlMapClientTemplate().update("${m.name}.update", ${m.name});
+		return ${m.name};
+	}
+	@Override
+	public ${m.className} updateNotEmpty(${m.className} ${m.name}) {
+		getSqlMapClientTemplate().update("${m.name}.updateNotEmpty", ${m.name});
+		return ${m.name};
+	}
+
+	@Override
+	public void delete(${m.key.type.simpleName} ${m.key.name}) {
+		getSqlMapClientTemplate().delete("${m.name}.delete", ${m.key.name});
+	}
+	#end
+}

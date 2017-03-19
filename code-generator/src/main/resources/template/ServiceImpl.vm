@@ -1,0 +1,67 @@
+package ${m.packageName}.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import ${m.packageName}.service.${m.className}Service;
+import ${m.packageName}.dao.${m.className}Dao;
+import ${m.packageName}.pojo.${m.className};
+import com.yzb.framework.core.pojo.Page;
+
+@Service("${m.name}Service")
+public class ${m.className}ServiceImpl implements ${m.className}Service {
+	
+	@Autowired
+	private ${m.className}Dao ${m.name}Dao;
+	
+	@Override
+	public ${m.className} get(${m.key.type.simpleName} ${m.key.name}) {
+		return ${m.name}Dao.get(${m.key.name});
+	}
+
+	@Override
+	public List<${m.className}> query(${m.className} ${m.name}) {
+		return ${m.name}Dao.query(${m.name});
+	}
+	@Override
+	public List<${m.className}> query(Map<String, Object> map) {
+		return ${m.name}Dao.query(map);
+	}
+
+	@Override
+	public Page<${m.className}> pageQuery(Page<${m.className}> page) {
+		return ${m.name}Dao.pageQuery(page);
+	}
+	@Override
+	public Page<${m.className}> pageQuery(Map<String, Object> map) {
+		return ${m.name}Dao.pageQuery(map);
+	}
+
+	@Override
+	@Transactional
+	public ${m.className} save(${m.className} ${m.name}) {
+		return ${m.name}Dao.save(${m.name});
+	}
+	#if( $m.editAble )
+	@Override
+	@Transactional
+	public ${m.className} update(${m.className} ${m.name}) {
+		return ${m.name}Dao.update(${m.name});
+	}
+	@Override
+	@Transactional
+	public ${m.className} updateNotEmpty(${m.className} ${m.name}) {
+		return ${m.name}Dao.updateNotEmpty(${m.name});
+	}
+	
+	@Override
+	@Transactional
+	public void delete(${m.key.type.simpleName} ${m.key.name}) {
+		${m.name}Dao.delete(${m.key.name});
+	}
+	#end
+}

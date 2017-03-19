@@ -1,0 +1,97 @@
+'use strict';
+
+angular.module('${m.aggregate}.${m.name}', ['yzb.common']).factory('${m.className}', [ '$http', '$uibModal', 'yzbUtil', function($http, $uibModal, util) {
+	
+	var ${m.name} = {
+		get : function(${m.key.name}, callback){
+			$http.get (app.base + '${m.name}/get.json?${m.key.name}=' + ${m.key.name} )
+				.then(function(data) {
+				callback(data.data);
+			});
+		},
+		pageQuery: function(queryObj, callback){
+			$http.get (app.base + '${m.name}/pageQuery.json', {
+				params : queryObj
+			}).then(function(data) {
+				callback(data);
+			});
+		},
+		query: function(queryObj, callback){
+			$http.get (app.base + '${m.name}/query.json', {
+				params : queryObj
+			}).then(function(data) {
+				callback(data);
+			});
+		},
+		save: function(${m.name}, callback){
+			$http.get (app.base + '${m.name}/save.json', {
+				params: ${m.name}
+			}).then(function(data){
+				callback(data.data);
+			});
+		},
+		update: function(${m.name}, callback){
+			$http.get (app.base + '${m.name}/update.json', {
+				params: ${m.name}
+			}).then(function(data){
+				callback(data.data);
+			});
+		},		
+		deleteBy${m.keyClassName} : function(${m.key.name}, callback){
+			$http.get (app.base + '${m.name}/delete.json?${m.key.name}=' + ${m.key.name}).then(function(data) {
+				callback();
+			});
+		},
+		page : {
+				//打开${m.comment}详情弹窗
+			openPop : function(data, callback, readOnly){
+				$uibModal.open ({
+						animation : false,
+						templateUrl : '/static/html/${m.aggregate}/${m.name}/${m.name}-pop.shtml',
+						size : 'lg',
+						controller : function($scope, $uibModalInstance) {
+							$scope.${m.name} = {};
+							$scope.readOnly = readOnly;
+							angular.copy(data, $scope.${m.name});
+							$scope.ok = function() {
+								if(!$scope.${m.name}Form.$valid){
+									util.alert("出错", "校验出错");
+									return;
+								}
+								util.disableButton($scope);
+								callback($scope.${m.name}, function() {
+									$uibModalInstance.dismiss('cancel');
+								});
+							};
+							$scope.cancel = function() {
+								$uibModalInstance.dismiss('cancel');
+							}
+						}
+					});
+			},
+			//打开${m.comment}Tab页
+			openTab : function(${m.name}){
+				if(${m.name}){
+					tab.addTab('${m.comment}_' + ${m.name}.${m.key.name}, '/static/html/${m.aggregate}/${m.name}/${m.name}-detail.shtml?${m.key.name}=' + ${m.name}.${m.key.name});
+				}else{
+					tab.addTab('新建${m.comment}', '/static/html/${m.aggregate}/${m.name}/${m.name}-detail.shtml');
+				}
+			},
+			refreshTab: function(${m.name}){
+				tab.refresh('${m.comment}_' + ${m.name}.${m.key.name}, '/static/html/${m.aggregate}/${m.name}/${m.name}-detail.shtml?${m.key.name}=' + ${m.name}.${m.key.name});
+			},
+			//选择
+			select : function(callback, filter) {
+				util.createSelectPop({
+					url: '/static/html/${m.aggregate}/${m.name}/${m.name}-select.shtml',
+					service: ${m.className},
+					callback: callback,
+					filter: filter
+				});
+			}
+		}
+	}
+	
+	return ${m.name};
+	
+} ]);

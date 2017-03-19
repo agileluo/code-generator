@@ -1,0 +1,6 @@
+CREATE TABLE `${m.dbName}` (
+  #foreach($obj in $m.conf.sqlList)
+  `${obj.dbName}` ${obj.sqlType} ${obj.notNull} ${obj.autoIncrease} COMMENT '${obj.comment}${obj.codeType}',
+  #end
+  UNIQUE KEY `${m.conf.keyDbName}` (`${m.conf.keyDbName}`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='${m.comment}';

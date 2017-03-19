@@ -1,0 +1,61 @@
+package ${m.packageName}.web;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import ${m.packageName}.pojo.${m.className};
+import ${m.packageName}.service.${m.className}Service;
+import com.yzb.framework.core.pojo.Page;
+import com.yzb.framework.common.util.PageUtils;
+
+@Controller
+public class ${m.className}Controller {
+	
+	@Autowired
+	private ${m.className}Service ${m.name}Service;
+	
+	
+	@RequestMapping("/${m.name}/get")
+	public @ResponseBody ${m.className} get(@RequestParam ${m.key.type.simpleName} ${m.key.name}) {
+		return ${m.name}Service.get(${m.key.name});
+	}
+	
+	@RequestMapping("/${m.name}/query")
+	public @ResponseBody List<${m.className}> query(@ModelAttribute ${m.className} ${m.name}) {
+		return ${m.name}Service.query(${m.name});
+	}
+
+	@RequestMapping("/${m.name}/pageQuery")
+	public @ResponseBody Page<${m.className}> pageQuery(@ModelAttribute Page<${m.className}> page, @ModelAttribute ${m.className} ${m.name}) {
+		page.setData(${m.name});
+		return ${m.name}Service.pageQuery(page);
+	}
+
+	@RequestMapping("/${m.name}/save")
+	public @ResponseBody ${m.className} save(@ModelAttribute ${m.className} ${m.name}) {
+		return ${m.name}Service.save(${m.name});
+	}
+	#if( $m.editAble )
+	@RequestMapping("/${m.name}/update")
+	public @ResponseBody ${m.className} update(@ModelAttribute ${m.className} ${m.name}) {
+		return ${m.name}Service.update(${m.name});
+	}
+	@RequestMapping("/${m.name}/updateNotEmpty")
+	public @ResponseBody ${m.className} updateNotEmpty(@ModelAttribute ${m.className} ${m.name}) {
+		return ${m.name}Service.updateNotEmpty(${m.name});
+	}
+	@RequestMapping("/${m.name}/delete")
+	public @ResponseBody Map<String, Object> delete(@RequestParam ${m.key.type.simpleName} ${m.key.name}) {
+		${m.name}Service.delete(${m.key.name});
+		return PageUtils.emptyMap();
+	}
+	#end
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html ng-app="${m.name}ListApp">
+<head>
+<!--# include file="/static/html/common/common-header.html" -->
+<script charset="utf-8" type="text/javascript" src="${m.name}-service.js"></script>
+<script charset="utf-8" type="text/javascript" src="${m.name}-list.js"></script>
+</head>
+<body class="yzb-container">
+	<div ng-controller="${m.name}ListController">
+		<div class="row">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<form class="form-inline">
+						#foreach($obj in $m.conf.queryList)
+						<div class="form-group">
+							<label>${obj.comment}：</label>
+							#if($obj.codeType == "") <input ng-model="queryObj.${obj.name}" name="queryObj.${obj.name}" my-enter="query()"
+								class="form-control" type="text" placeholder="输入${obj.comment}">
+							#else <select ng-model="queryObj.${obj.name}" name="queryObj.${obj.name}" class="form-control" my-option="${obj.codeType}" ></select>  #end
+						</div>
+						#end
+						<button class="btn btn-primary" ng-disabled="ajaxLoading" ng-click="query()">查 询</button>
+						<button class="btn btn-danger" ng-click="cleanQueryObj(queryObj)">清 除</button>
+						<button class="btn btn-primary" ng-click="add${m.className}()">增加${m.comment}</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<table class="table table-striped table-hover">
+						<thead>
+							<tr>
+							#foreach($obj in $m.fieldList)
+							<th>${obj.comment}</th>
+							#end
+							<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="${m.name} in ${m.name}List" ng-dblclick="edit${m.className}(${m.name},true)">
+								#foreach($obj in $m.fieldList)
+								<td>{{ ${m.name}.${obj.name} }}</td>
+								#end
+								<td><a href="javascript:void(0)" ng-click="delete${m.className}(${m.name}, $index)">删除</a><b class="line">|</b><a
+									href="javascript:void(0)" ng-click="edit${m.className}(${m.name})">编辑</a></td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div class="row">
+						<div class="col-sm-offset-2 col-md-10 right">
+							<my-pagination q="queryObj" qn="query"></my-pagination>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

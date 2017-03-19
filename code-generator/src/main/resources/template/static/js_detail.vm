@@ -1,0 +1,31 @@
+'use strict';
+angular.module('${m.name}DetailApp', [ 'yzb.common', '${m.aggregate}.${m.name}']).controller(
+		'${m.name}DetailController',
+		['$scope','$http','$log', 'yzbUtil','${m.className}', function($scope, $http, $log, util, ${m.className}) {
+				angular.extend($scope, util);
+				var ${m.key.name} = $scope.${m.key.name} = util.getParameter('${m.key.name}');
+				
+				if (${m.key.name}) {
+					${m.className}.get(${m.key.name}, function(${m.name}) {
+						$scope.${m.name} = ${m.name};
+					});
+				}
+				
+				$scope.save = function() {
+					util.disableButton($scope);
+					if(!$scope.${m.name}Form.$valid){
+						util.alert("error", "校验出错");
+						return;
+					}
+					if (${m.key.name}) {
+						${m.className}.update($scope.${m.name}, function(${m.name}) {
+							${m.className}.page.refreshTab(${m.name});
+						})
+					} else {
+						${m.className}.save($scope.${m.name}, function(${m.name}) {
+							${m.className}.page.refreshTab(${m.name});
+						})
+					}
+				};
+			   
+		}]);

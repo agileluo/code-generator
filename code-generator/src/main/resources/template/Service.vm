@@ -1,0 +1,28 @@
+package ${m.packageName}.service;
+
+import java.util.List;
+import java.util.Map;
+
+import ${m.packageName}.pojo.${m.className};
+import com.yzb.framework.core.pojo.Page;
+
+public interface ${m.className}Service {
+	 ${m.className} get(${m.key.type.simpleName} ${m.key.name});
+	 List<${m.className}> query(${m.className} ${m.name});
+	 List<${m.className}> query(Map<String, Object> map);
+	 Page<${m.className}> pageQuery(Page<${m.className}> page); 
+	 /**
+	 * 分类查询（下面分页参数2选1）<br/>
+	 * 1, rows, page： rows一页多少行, page第几页， 从1开始<br/>
+	 * 2, from, to：  从第from+1条到第to条， 第一条为0<br/>
+	 * @param map
+	 * @return
+	 */
+	 Page<${m.className}> pageQuery(Map<String, Object> map);
+	 ${m.className} save(${m.className} ${m.name});
+	 #if( $m.editAble )
+	 ${m.className} update(${m.className} ${m.name});
+	 ${m.className} updateNotEmpty(${m.className} ${m.name});
+	 void delete(${m.key.type.simpleName} ${m.key.name});	
+	 #end
+}

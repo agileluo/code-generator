@@ -1,0 +1,44 @@
+'use strict';
+
+angular.module('${m.name}ListApp', [ 'ui.bootstrap', 'yzb.common','${m.aggregate}.${m.name}']).controller('${m.name}ListController',
+		[ '$scope', '$http', '$log', '$uibModal', 'yzbUtil', '${m.className}', function($scope, $http, $log, $uibModal, util, ${m.className}) {
+			angular.extend($scope, util);
+			var queryObj = $scope.queryObj = {
+				rows : "10",
+				page : 1,
+				total : 0
+			};
+			$scope.query = function(page) {
+				util.disableButton($scope);
+				queryObj.page = page ? page : 1;
+				${m.className}.pageQuery($scope.queryObj, function(data){
+					queryObj.total = data.total;
+					$scope.${m.name}List = data.data;
+				})
+			};
+			$scope.delete${m.className} = function(${m.name}, index) {
+				util.confirm('info', '确认删除${m.comment}?', function(){
+					${m.className}.deleteBy${m.keyClassName}(${m.name}.${m.key.name}, function(){
+						$scope.${m.name}List.splice(index, 1);
+					});
+				});
+			};
+			$scope.edit${m.className} = function(${m.name},readOnly) {
+				${m.className}.page.openPop(${m.name}, function(data, callback){
+					${m.className}.update(data, function(d){
+						angular.copy(d, ${m.name});
+						callback();
+					})
+				},readOnly);
+			};
+			$scope.add${m.className} = function() {
+				${m.className}.page.openPop({}, function(data,callback){
+					${m.className}.save(data, function(d){
+						$scope.${m.name}List || ($scope.${m.name}List = []);
+						$scope.${m.name}List.unshift(d);
+						callback();
+					})
+				});
+			};
+			$scope.query();
+		} ]);
