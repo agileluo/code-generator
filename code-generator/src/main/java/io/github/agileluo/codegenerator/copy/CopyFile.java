@@ -20,29 +20,24 @@ public class CopyFile {
 	private String model = null;
 	private String className = null;
 	private String javaBase;
-	private String htmlBase;
 	private String pack;
 
-	private String serviceImplPath;
-	private String webPath;
+	private String basePath;
 	private String staticPath;
 
 	private Conf config;
 
 	public CopyFile(Class<?> c, Conf config) {
 		this.config = config;
-		String parentPath = CodeUtil.getProjectRootPath();
 
 		this.className = c.getSimpleName();
 		this.model = className.substring(0, 1).toLowerCase() + className.substring(1);
 		String packageName = c.getPackage().getName();
 		this.pack = packageName.substring(8, packageName.lastIndexOf(".")).replaceAll("\\.", "/");
 		this.javaBase = javaSourceBase + packageName.substring(0, packageName.lastIndexOf(".")).replaceAll("\\.", "/");
-		this.htmlBase = "src/main/webapp";
 
-		serviceImplPath = parentPath + "/service/yzb-service-" + config.getServiceProject() + "/trunk";
-		webPath = parentPath + "/app/yzb-web-" + config.getWebProject() + "/trunk";
-		staticPath = parentPath + "/app/yzb-web-static/trunk/static/html" ;
+		basePath = "./";
+		staticPath = "/app/yzb-web-static/trunk/static/html" ;
 		
 	}
 	public void copy(){
@@ -55,18 +50,16 @@ public class CopyFile {
 	}
 	public void makeDir() throws IOException {
 
-		if (config.isAllow(Conf.GEN_DAO)) {
-			mkdir(serviceImplPath + "/" + javaBase + "/dao");
-			mkdir(serviceImplPath + "/" + javaBase + "/dao/impl");
+		if (config.isAllow(Conf.DAO)) {
+			mkdir(basePath + "/" + javaBase + "/dao/impl");
 		}
-		if (config.isAllow(Conf.GEN_SERVICE)) {
-			mkdir(javaBase + "/service");
-			mkdir(serviceImplPath + "/" + javaBase + "/service/impl");
+		if (config.isAllow(Conf.SERVICE)) {
+			mkdir(basePath + "/" + javaBase + "/service/impl");
 		}
-		if (config.isAllow(Conf.GEN_ACTION)) {
-			mkdir(webPath + "/" + javaBase + "/web");
+		if (config.isAllow(Conf.REST)) {
+			mkdir(basePath + "/" + javaBase + "/web");
 		}
-		if (config.isAllow(Conf.GEN_STATIC)) {
+		if (config.isAllow(Conf.STATIC)) {
 			mkdir(staticPath + pack);
 		}
 	}
@@ -79,21 +72,21 @@ public class CopyFile {
 	private String sourceDir = "target/";
 
 	public void copySource() throws IOException {
-		if (config.isAllow(Conf.GEN_IBATIS)) {
-			copyFile(model + "-ibatis.xml", serviceImplPath + "/src/main/resources/ibatis");
+		if (config.isAllow(Conf.IBATIS)) {
+			copyFile(model + "-ibatis.xml", basePath + "/src/main/resources/ibatis");
 		}
-		if (config.isAllow(Conf.GEN_SERVICE)) {
+		if (config.isAllow(Conf.SERVICE)) {
 			copyFile(className + "Service.java", javaBase + "/service");
-			copyFile(className + "ServiceImpl.java", serviceImplPath + "/" + javaBase + "/service/impl");
+			copyFile(className + "ServiceImpl.java", basePath + "/" + javaBase + "/service/impl");
 		}
-		if (config.isAllow(Conf.GEN_DAO)) {
-			copyFile(className + "Dao.java", serviceImplPath + "/" + javaBase + "/dao");
-			copyFile(className + "DaoImpl.java", serviceImplPath + "/" + javaBase + "/dao/impl");
+		if (config.isAllow(Conf.DAO)) {
+			copyFile(className + "Dao.java", basePath + "/" + javaBase + "/dao");
+			copyFile(className + "DaoImpl.java", basePath + "/" + javaBase + "/dao/impl");
 		}
-		if (config.isAllow(Conf.GEN_ACTION)) {
-			copyFile(className + "Controller.java", webPath + "/" + javaBase + "/web");
+		if (config.isAllow(Conf.REST)) {
+			copyFile(className + "Controller.java", basePath + "/" + javaBase + "/web");
 		}
-		if (config.isAllow(Conf.GEN_STATIC)) {
+		if (config.isAllow(Conf.STATIC)) {
 			String htmlPath = staticPath + "/" +  pack ;
 			copyFile(model + "-detail.shtml", htmlPath);
 			copyFile(model + "-list.shtml", htmlPath);

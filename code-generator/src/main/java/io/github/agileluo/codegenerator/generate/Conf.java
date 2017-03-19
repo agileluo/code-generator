@@ -16,36 +16,36 @@ public class Conf {
 	/**
 	 * 开启所有功能
 	 */
-	public static final int ALLOW_ALL = 0b11111111;
+	public static final int All = 0b11111111;
 	/**
 	 * 部署table
 	 */
-	public static final int DEPLOY_TABLE = 1 << 0;
+	public static final int DDL = 1 << 0;
 	/**
 	 * 配置菜单
 	 */
-	public static final int CONFIG_MENU = 1 << 1;
+	public static final int MENU = 1 << 1;
 	/**
 	 * 生成ibatis
 	 */
-	public static final int GEN_IBATIS = 1 << 2;
+	public static final int IBATIS = 1 << 2;
 	/**
 	 * 生成dao
 	 */
-	public static final int GEN_DAO = 1 << 3;
+	public static final int DAO = 1 << 3;
 	/**
 	 * 生成service
 	 */
-	public static final int GEN_SERVICE = 1 << 4;
+	public static final int SERVICE = 1 << 4;
 
 	/**
 	 * 生成action
 	 */
-	public static final int GEN_ACTION = 1 << 5;
+	public static final int REST = 1 << 5;
 	/**
 	 * 生成静态文件
 	 */
-	public static final int GEN_STATIC = 1 << 6;
+	public static final int STATIC = 1 << 6;
 
 	private int flag;
 

@@ -46,20 +46,12 @@ public class CodeGenerate {
 	 *            各种配置，随意搭配功能
 	 */
 	public static void generateCode(Class<?> c, Conf config) {
-		if (config.isAllow(Conf.DEPLOY_TABLE) && config.getDeployDbHost() == null) {
+		if (config.isAllow(Conf.DDL) && config.getDeployDbHost() == null) {
 			throw new RuntimeException("部署Table需要配置deployDbInfo");
 		}
-		if (config.isAllow(Conf.CONFIG_MENU) && (config.getMenuDbHost() == null || config.getAppName() == null
+		if (config.isAllow(Conf.MENU) && (config.getMenuDbHost() == null || config.getAppName() == null
 				|| config.getMainMenuName() == null || config.getMenuName() == null)) {
 			throw new RuntimeException("部署菜单需要配置 menuDbInfo, appName, mainMenuName, menuName");
-		}
-		if ((config.isAllow(Conf.GEN_ACTION) || config.isAllow(Conf.GEN_STATIC))
-				&& config.getWebProject() == null) {
-			throw new RuntimeException("生成Action或 jsp js需要配置 webProject");
-		}
-		if ((config.isAllow(Conf.GEN_SERVICE) || config.isAllow(Conf.GEN_DAO)
-				|| config.isAllow(Conf.GEN_IBATIS)) && config.getServiceProject() == null) {
-			throw new RuntimeException("生成dao，ibatis或 service需要配置 serviceProject");
 		}
 
 		JavaClassModelParse p = new JavaClassModelParse(c);

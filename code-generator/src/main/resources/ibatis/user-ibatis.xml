@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap>
+
+	<typeAlias type="com.yzb.framework.core.pojo.Page" alias="page" />
+	<typeAlias type="io.github.agileluo.codegenerator.example.entity.User" alias="user" />
+
+	<select id="user.select" resultClass="user"
+		parameterClass="java.lang.Long">
+		SELECT
+					a.user_id userId ,		 	 
+					a.password password ,		 	 
+					a.create_by createBy ,		 	 
+					a.create_date createDate ,		 	 
+					a.update_by updateBy ,		 	 
+					a.update_date updateDate  		 	 
+				FROM
+			user a
+		where
+			a.user_id = #userId#
+	</select>
+	<sql id="user.commonQuery">
+		<dynamic prepend="where">
+								</dynamic>
+	</sql>
+	<select id="user.query" resultClass="user"
+		parameterClass="java.util.Map">
+		SELECT
+					a.user_id userId ,		 	 
+					a.password password ,		 	 
+					a.create_by createBy ,		 	 
+					a.create_date createDate ,		 	 
+					a.update_by updateBy ,		 	 
+					a.update_date updateDate  		 	 
+				FROM
+			user a 
+		<include refid="user.commonQuery"/>
+		order by a.update_date desc
+		limit #from#, #to#
+	</select>
+	<select id="user.queryCount" resultClass="java.lang.Integer"
+		parameterClass="java.util.Map">
+		SELECT
+		    count(1)
+		FROM
+			user a
+		<include refid="user.commonQuery"/>
+	</select>
+	<insert id="user.insert"  parameterClass="user">
+		insert into user(
+	    		 	password,		 	
+				 	create_by,		 	
+				 	create_date,		 	
+				 	update_by,		 	
+				 	update_date 		 	
+			    ) values (
+	     		 	#password# ,		 	
+				 	#createBy# ,		 	
+				 	now() ,		 	
+				 	#updateBy# ,		 	
+				 	now()  		 	
+				)
+				<selectKey resultClass="long" keyProperty="userId">  
+        	select LAST_INSERT_ID()   
+    	</selectKey>  
+    		</insert>
+		<update id="user.update"  parameterClass="user">
+		update user a set 
+	    		 	a.password = #password#,
+		 	
+				a.update_by = #updateBy#,
+		a.update_date = now()
+		 where a.user_id = #userId#
+	</update>
+	<!-- 更新非空内容 -->
+	<update id="user.updateNotEmpty"  parameterClass="user">
+		update user a set 
+	    		 	<isNotEmpty property="password" prepend="," >
+	    		a.password = #password#
+	  		</isNotEmpty>
+		 ,
+		a.update_by = #updateBy#,
+		a.update_date = now()
+		 where a.user_id = #userId#
+	</update>
+	<delete id="user.delete"  parameterClass="java.lang.Long">
+		delete from user  where user_id=#userId#
+	</delete>
+	</sqlMap>

@@ -98,10 +98,10 @@ public class VelocityGenerate {
 						}
 					}else if(f.getJavaType() == Integer.class
 							|| f.getJavaType() == int.class){
-						sqlType = "int(" + f.getLength() + ")";
+						sqlType = "int";
 					}else if(f.getJavaType() == Long.class
 							|| f.getJavaType() == long.class){
-						sqlType = "bigint(" + f.getLength() + ")";
+						sqlType = "bigint";
 					}else if(f.getJavaType() == Date.class){
 						sqlType = "datetime";
 					}else if(f.getJavaType() == BigDecimal.class

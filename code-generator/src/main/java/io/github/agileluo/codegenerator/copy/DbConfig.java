@@ -29,10 +29,10 @@ public class DbConfig {
 		this.config = config;
 	}
 	public void config(){
-		if(config.isAllow(Conf.CONFIG_MENU)){
+		if(config.isAllow(Conf.MENU)){
 			configMenu();
 		}
-		if(config.isAllow(Conf.DEPLOY_TABLE)){
+		if(config.isAllow(Conf.DDL)){
 			deployTable();
 		}
 	}

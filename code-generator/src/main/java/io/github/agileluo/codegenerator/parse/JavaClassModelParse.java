@@ -1,22 +1,17 @@
 package io.github.agileluo.codegenerator.parse;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.agileluo.codegenerator.util.CodeUtil;
-
 import io.github.agileluo.codegenerator.core.MyEntity;
 import io.github.agileluo.codegenerator.core.MyField;
+import io.github.agileluo.codegenerator.util.CodeUtil;
 
 public class JavaClassModelParse implements ModelParse {
 	private Model m;
 	
 	public JavaClassModelParse(Class<?> c){
-		if(!Serializable.class.isAssignableFrom(c)){
-			throw new RuntimeException("需要实现Serializable接口");
-		}
 		m = new Model();
 		m.setCls(c);
 		m.setClassName(c.getSimpleName());

@@ -3,7 +3,7 @@ package ${m.packageName}.dao;
 import java.util.List;
 import java.util.Map;
 
-import ${m.packageName}.pojo.${m.className};
+import ${m.packageName}.entity.${m.className};
 import com.yzb.framework.core.pojo.Page;
 
 public interface ${m.className}Dao {

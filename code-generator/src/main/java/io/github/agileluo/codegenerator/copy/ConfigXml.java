@@ -27,13 +27,13 @@ public class ConfigXml {
 	}
 
 	public void gen() {
-		if (config.isAllow(Conf.GEN_IBATIS)) {
+		if (config.isAllow(Conf.IBATIS)) {
 			configIbatis();
 		}
-		if (config.isAllow(Conf.GEN_SERVICE)) {
+		if (config.isAllow(Conf.SERVICE)) {
 			registerService();
 		}
-		if (config.isAllow(Conf.GEN_ACTION)) {
+		if (config.isAllow(Conf.REST)) {
 			subscribeService();
 		}
 	}
