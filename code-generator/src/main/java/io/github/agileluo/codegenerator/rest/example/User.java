@@ -1,4 +1,4 @@
-package io.github.agileluo.codegenerator.example.entity;
+package io.github.agileluo.codegenerator.rest.example;
 
 import java.util.Date;
 

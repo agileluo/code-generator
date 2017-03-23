@@ -24,7 +24,7 @@ public class JavaClassModelParse implements ModelParse {
 		
 		MyEntity sparkModel = c.getAnnotation(MyEntity.class);
 		if(sparkModel != null){
-			m.setComment(sparkModel.comment());
+			m.setComment(sparkModel.name());
 			m.setEditAble(sparkModel.editAble());
 		}
 		
@@ -41,7 +41,7 @@ public class JavaClassModelParse implements ModelParse {
 			if(fild != null){
 				
 				mf.setNotNull(fild.notNull());
-				mf.setComment(fild.comment());
+				mf.setComment(fild.name());
 				mf.setCodeType(fild.codeType());
 				mf.setIndex(fild.index());
 				mf.setQuery(fild.query());

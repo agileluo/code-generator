@@ -30,7 +30,7 @@ public @interface MyField {
 	 * 注释
 	 * @return
 	 */
-	String comment();
+	String name();
 	/**
 	 * 是否为主键
 	 * 

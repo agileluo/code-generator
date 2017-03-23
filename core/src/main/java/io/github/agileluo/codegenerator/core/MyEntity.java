@@ -21,7 +21,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface MyEntity {
-	String comment();
+	String name();
+	String desc() default "";
 	/**是否可以修改*/
 	boolean editAble() default true;
 }
